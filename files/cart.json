@@ -1,0 +1,44 @@
+[
+	{
+		"title": "carrito de prueba",
+		"id": 1,
+		"productos": [
+			{
+				"productID": 1,
+				"quantity": 3
+			}
+		]
+	},
+	{
+		"title": "carrito de prueba 2",
+		"id": 2,
+		"productos": [
+			{
+				"productID": 2,
+				"quantity": 3
+			},
+			{
+				"productID": 1,
+				"quantity": 3
+			},
+			{
+				"productID": 3,
+				"quantity": 2
+			}
+		]
+	},
+	{
+		"title": "carrito de prueba 3",
+		"id": 3,
+		"productos": [
+			{
+				"productID": 1,
+				"quantity": 5
+			},
+			{
+				"productID": 3,
+				"quantity": 2
+			}
+		]
+	}
+]
