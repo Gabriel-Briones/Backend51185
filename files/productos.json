@@ -139,5 +139,36 @@
 		"code": "123",
 		"stock": "12",
 		"id": 13
+	},
+	{
+		"title": "asdasdasd",
+		"description": "asdasdadsd",
+		"price": "123123",
+		"status": true,
+		"category": "asdasdasd",
+		"code": "123123123",
+		"stock": "23",
+		"id": 14
+	},
+	{
+		"title": "asdasdasdasd",
+		"description": "asdasdasd",
+		"price": "123123",
+		"status": true,
+		"category": "asdasdasdasdasd",
+		"code": "13123123",
+		"stock": "23",
+		"id": 15
+	},
+	{
+		"title": "asdasd",
+		"description": "123",
+		"price": "123",
+		"thumbnail": "asdasd",
+		"status": true,
+		"category": "asdasd",
+		"code": "12",
+		"stock": "asdasd",
+		"id": 16
 	}
 ]

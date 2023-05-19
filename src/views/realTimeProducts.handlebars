@@ -7,11 +7,13 @@
             <label for="" >Descripción:</label>
             <input type="text" id="descripcion" required>
             <label for="">Precio:</label>
-            <input type="text" id="precio" required>
+            <input type="number" id="precio" required>
             <label for="">Código:</label>
             <input type="text" id="codigo" required>
+            <label for="">Link imagen:</label>
+            <input type="text" id="thumbnail" required placeholder="-">
             <label for="">Stock:</label>
-            <input type="text" id="stock" required>
+            <input type="number" id="stock" required>
             <label for="">categoría:</label>
             <input type="text" id="categoria" required>
             <button type="submit" id="btnadd">Agregar</button>
@@ -27,7 +29,7 @@
     <h1 class="title">Lista productos:</h1>
 
     {{#each productos}}
-        <div class="products">
+        <div class="products" id="productos">
             <h3><span>Nombre: </span>{{this.title}}</h3>
             <h5 ><span>Id: </span>{{this._id}}</h5>
             <h5><span>Descripción: </span>{{this.description}}</h5>

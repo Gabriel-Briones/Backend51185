@@ -18,10 +18,13 @@ btnadd.addEventListener("click", async (e) => {
         title: title.value,
         description: description.value,
         price: price.value,
+        thumbnail: thumbnail.value,
         code: code.value,
         stock: stock.value,
-        category: category.value,
+        category: category.value
     }
+
+    console.log("product desde el EventListener", product)
 
     if(!title.value || !description.value || !price.value || !code.value || !stock.value || !category.value){
         return alert("por favor coloca todos los datos");
@@ -35,6 +38,8 @@ btnadd.addEventListener("click", async (e) => {
         })
 
         const postProductResponse = response.json()
+
+        //console.log(postProductResponse)
         
         if(!postProductResponse) return alert(postProductResponse.response)
 
@@ -102,13 +107,13 @@ const createHtml = (data) => {
 }
 
 socket.on("newproduct", data =>{
-    products.innerHTML = " "
+    products.innerHTML = ""
     createHtml(data);
     //window.location.reload();
 })
 
 socket.on("productdelete", data => {
-    products.innerHTML = " "
+    products.innerHTML = ""
     createHtml(data)
 })
 

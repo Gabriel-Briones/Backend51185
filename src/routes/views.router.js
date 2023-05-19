@@ -1,7 +1,7 @@
 import { Router } from "express";
-import ProductManager from "../dao/managers/ProductManager.js";
+import ProductManager from "../dao/managers/ProductManagerMongo.js";
 import productModel from "../dao/models/products.model.js";
-import {io} from "../app.js"
+import { io } from "../app.js"
 
 
 
@@ -9,10 +9,10 @@ const productManager = new ProductManager()
 const router = Router();
 
 router.get("/", async (req, res) => {
-    const {page = 1, limit=4} = req.query;
-    const {docs, hasPrevPage, hasNextPage, nextPage, prevPage} = await productModel.paginate({},{page,limit,lean:true});
+    const { page = 1, limit = 4 } = req.query;
+    const { docs, hasPrevPage, hasNextPage, nextPage, prevPage } = await productModel.paginate({}, { page, limit, lean: true });
     const productos = docs;
-    res.render('home', 
+    res.render('home',
         {
             style: 'index.css',
             productos,
@@ -25,18 +25,18 @@ router.get("/", async (req, res) => {
 
 router.get("/realtimeproducts", async (req, res) => {
     const productos = await productModel.find().lean();
-    res.render('realTimeProducts', 
-    {
-        style: 'index.css',
-        productos
-    });
-    
+    res.render('realTimeProducts',
+        {
+            style: 'index.css',
+            productos
+        });
+
 })
 
-router.post("/realtimeproducts", async (req, res) =>{
-    const {title, code, price, description, stock, category, thumbnail} = req.body
-    const producto = await productManager.addProduct(title,description,price, thumbnail, code,stock,category)
-    producto ? res.send({status: producto}): res.status(400).send({error: "Dato faltante o el producto ya existe"});
+router.post("/realtimeproducts", async (req, res) => {
+    const { title, description, price, thumbnail, code, stock, category } = req.body
+    const producto = await productManager.addProduct(title, description, price, thumbnail, code, stock, category)
+    producto ? res.send({ status: producto }) : res.status(400).send({ error: "Dato faltante o el producto ya existe" });
 
     const productos = await productManager.getProducts()
 
@@ -46,12 +46,12 @@ router.post("/realtimeproducts", async (req, res) =>{
 
 router.delete("/realtimeproducts/:pid", async (req, res) => {
     let pid = req.params.pid
-    const producto = await productManager.deleteProductById(pid)
-    producto ? res.send({status: producto}) : res.status(400).send({error: "No existe el ID en los productos"})
+    const producto = await productManager.deleteProduct(pid)
+    producto ? res.send({ status: producto }) : res.status(400).send({ error: "No existe el ID en los productos" })
 
     const productos = await productManager.getProducts()
 
     io.emit("productdelete", productos);
-    
+
 })
 export default router
