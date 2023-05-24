@@ -37,7 +37,7 @@ app.use("/api/cart", cartRouter)
 export const io = new Server(server);
 
 io.on("connection", socket => {
-    console.log("usuario conectado");
+    console.log("socket en uso - usuario conectado");
 })
 
 

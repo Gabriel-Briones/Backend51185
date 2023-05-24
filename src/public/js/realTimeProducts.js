@@ -24,8 +24,6 @@ btnadd.addEventListener("click", async (e) => {
         category: category.value
     }
 
-    console.log("product desde el EventListener", product)
-
     if(!title.value || !description.value || !price.value || !code.value || !stock.value || !category.value){
         return alert("por favor coloca todos los datos");
     }
@@ -38,8 +36,6 @@ btnadd.addEventListener("click", async (e) => {
         })
 
         const postProductResponse = response.json()
-
-        //console.log(postProductResponse)
         
         if(!postProductResponse) return alert(postProductResponse.response)
 
@@ -50,6 +46,9 @@ btnadd.addEventListener("click", async (e) => {
         code.value = ""
         stock.value = ""
         
+        alert("Producto agregado con éxito")
+        window.location.reload("realtimeproducts.html")
+
     }catch(error){
         console.error(error)
     }
@@ -69,12 +68,13 @@ btndelete.addEventListener("click", async (event) => {
         })
         const product = await response.json()
         
-
         if(!product) return alert(product)
         
         id.value = ""
         
-        alert("Product deleted.")
+        alert("Producto borrado con éxito")
+        window.location.reload("realtimeproducts.html")
+        
     }catch(error){
         console.error(error)
     }
@@ -109,7 +109,6 @@ const createHtml = (data) => {
 socket.on("newproduct", data =>{
     products.innerHTML = ""
     createHtml(data);
-    //window.location.reload();
 })
 
 socket.on("productdelete", data => {

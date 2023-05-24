@@ -1,25 +1,12 @@
 <div>
     <h1 class="title">PRODUCTOS - Tienda PC</h1>
+    <h2 class="title">Bienvenidos</h2>
 
-    {{#each productos}}
-        <div class="products">
-            <h3><span>Nombre: </span>{{this.title}}</h3>
-            <h5><span>Descripción: </span>{{this.description}}</h5>
-            <h5><span>Precio: </span>${{this.price}}</h5>
-            <h5><span>Imagen: </span>{{this.thumbnail}}</h5>
-            <h5><span>Stock: </span>{{this.stock}}</h5>
-            <h5><span>Código: </span>{{this.code}}</h5>
-            <button disabled="disabled">Agregar al carrito</button>
-        </div>
-    {{/each}}
-    <div class="boton">
-        {{#if hasPrevPage}}
-            <a href="/?page={{prevPage}}" ><button>Anterior</button></a>
-        {{/if}}
-        {{#if hasNextPage}}
-            <a href="/?page={{nextPage}}" ><button>Siguiente</button></a>
-        {{/if}}
-    </div>
+<div class="menu">
+                <a href="/products/" ><button>Productos</button></a>
+                <a href="/realtimeproducts" ><button>Modificar Productos</button></a>
+                <a href="/cart" ><button>Carrito</button></a>
+</div>
     
 </div>
 

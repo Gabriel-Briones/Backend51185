@@ -20,7 +20,7 @@ export default class CartManager {
     }
 
     addProductInCart = async (cid, pid) => {
-        const cart = await cartModel.findOne({ _id: cid });
+        const cart = await cartModel.findOne({ _id: cid }).lean();
         const producto = await productModel.findOne({ _id: pid })
 
         if (cart && producto) {
@@ -32,13 +32,12 @@ export default class CartManager {
                 cart.productos.push({ producto: pid, qty: 1 });
             }
 
-            const result = await cartModel.updateOne({ _id: cid }, { $set: cart });
+            const result = await cartModel.updateOne({ _id: cid }, { $set: cart }).lean();
 
             return ({
                 code: 200,
                 status: 'success',
                 message: cart.productos
-
             })
         } else {
             return ({
@@ -73,7 +72,9 @@ export default class CartManager {
     }
 
     getCarts = async () => {
-        const carts = await cartModel.find();
+        const carts = await cartModel.find().populate("productos.producto").lean();
+        // console.log("getCarts");
+        // console.log(carts);
 
         return ({
             code: 200,
@@ -83,8 +84,16 @@ export default class CartManager {
     }
 
     getCartById = async (cid) => {
-        const cart = await cartModel.findOne({ _id: cid })
-        console.log(JSON.stringify(cart, null, ('\t')))
+        const cart = await cartModel.findOne({ _id: cid }).populate("productos.producto").lean()
+
+        if (!cart) {
+            return ({
+                code: 404,
+                status: 'Carrito no encontrado',
+                message: []
+            })
+        }
+
         return ({
             code: 200,
             status: 'Success',
@@ -92,11 +101,31 @@ export default class CartManager {
         })
     }
 
+    updateCartById = async (cid, products) => {
+        const cart = await cartModel.findOne({ _id: cid }).lean();
+
+        if (cart && products) {
+            cart.productos = products
+            
+            const result = await cartModel.updateOne({ _id: cid }, { $set: cart }).lean();
+
+            return ({
+                code: 200,
+                status: 'success',
+                message: cart
+            })
+        } else {
+            return ({
+                code: 400,
+                status: 'Error',
+                message: 'Hubo un error al modificar el carrito'
+            })
+        }
+    }
+
     deleteAllProductsInCart = async (cid) => {
         const cart = await cartModel.findOne({ _id: cid });
-
         cart.productos = [];
-
         const result = await cartModel.updateOne({ _id: cid }, { $set: cart })
 
         return ({
@@ -104,5 +133,7 @@ export default class CartManager {
             status: 'Success',
             message: result
         })
+
     }
+
 } 
