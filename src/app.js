@@ -6,6 +6,9 @@ import cartRouter from "./routes/cart.router.js"
 import viewsRouter from "./routes/views.router.js"
 import { Server } from "socket.io";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
+
+
 
 const PORT = 8080;
 

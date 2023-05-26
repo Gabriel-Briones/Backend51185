@@ -77,6 +77,16 @@ router.delete("/realtimeproducts/:pid", async (req, res) => {
     io.emit("productdelete", productos);
 })
 
+router.get('/cookie', (req,res)=>{
+    res.render('cookies', {
+        style: 'index.css',
+    });
+})
+
+router.post('/cookie', (req,res)=>{
+    const data = req.body;
+    res.cookie('CoderCookie',data,{maxAge:10000}).send({status:"success", message:"cookie set"})
+})
 
 
 export default router
