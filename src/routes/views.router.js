@@ -2,14 +2,64 @@ import { Router } from "express";
 import ProductManager from "../dao/managers/ProductManagerMongo.js";
 import CartManager from "../dao/managers/cartManagerMongo.js";
 import productModel from "../dao/models/products.model.js";
+import userModel from "../dao/models/User.model.js";
 import { io } from "../app.js"
 
 const productManager = new ProductManager();
 const cartManager = new CartManager();
 const router = Router();
 
-router.get("/", async (req, res) => {
+//vuelve al perfil si ya está logueado
+const publicAcces = (req, res, next) => {
+    if (req.session.user) return res.redirect('/profile');
+    next();
+}
+//rol de administrador
+const adminAcces = (req, res, next) => {
+    console.log(req.session.user.rol);
+    if (req.session.user.rol !== 'Admin') {
+        console.log('Solo se admite al Administrador');
+        return res.redirect('/');
+    }
+    next();
+}
 
+//Va al login si no está logueado
+
+const privateAcces = (req, res, next) => {
+    if (!req.session.user) return res.redirect('/login');
+    next();
+}
+
+router.get('/register', publicAcces, (req, res) => {
+    res.render('register', {
+        style: 'index.css',
+    });
+})
+
+router.get('/login', publicAcces, (req, res) => {
+    res.render('login', {
+        style: 'index.css',
+    });
+})
+
+router.get('/profile', privateAcces, (req, res) => {
+    res.render('profile', {
+        style: 'index.css',
+        user: req.session.user
+    })
+}) // le pasamos los datos de la sesión de usuario
+
+router.get('/users', privateAcces, adminAcces, async (req, res) => {
+    const users = await userModel.find().lean();
+    const user = req.session.user;
+
+    res.render('users', {
+        users, user
+    })
+})
+
+router.get("/", async (req, res) => {
     res.render('home', {
         style: 'index.css',
     });
@@ -77,15 +127,24 @@ router.delete("/realtimeproducts/:pid", async (req, res) => {
     io.emit("productdelete", productos);
 })
 
-router.get('/cookie', (req,res)=>{
+router.get('/cookie', (req, res) => {
     res.render('cookies', {
         style: 'index.css',
     });
 })
 
-router.post('/cookie', (req,res)=>{
+router.post('/cookie', (req, res) => {
     const data = req.body;
-    res.cookie('CoderCookie',data,{maxAge:10000}).send({status:"success", message:"cookie set"})
+    res.cookie('CoderCookie', data, { maxAge: 10000 }).send({ status: "success", message: "cookie set" })
+})
+
+router.get('/Session', (req, res) => {
+    req.session.user = 'Active Session';
+    res.send('Session Set');
+});
+
+router.get('/Session/test', (req, res) => {
+    res.send(req.session.user);
 })
 
 
