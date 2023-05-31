@@ -9,11 +9,12 @@
   </head>
 
   <header>
-    <p>Bienvenido {{user.name}}</p>
+    <a href="/"><button>TiendaPC</button></a>
+    <p>Bienvenido: {{user.name}}</p>
     {{#if isAdmin}}
-      <p> eres ADMINISTRADOR</p>
+      <p>Eres: ADMINISTRADOR</p>
     {{else}}
-      <p>Eres {{user.rol}}</p>
+      <p>Eres: {{user.rol}}</p>
     {{/if}}
 
     <a href="/api/session/logout"><button>CERRAR SESIÓN</button></a>
