@@ -17,7 +17,7 @@ form.addEventListener('submit', e =>{
         }
     }).then(result=>{
         if(result.status == 200){
-            window.location.replace('/profile')
+            window.location.replace('/products')
         }
     })
 })

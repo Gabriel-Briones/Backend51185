@@ -4,8 +4,14 @@ import userModel from '../dao/models/User.model.js';
 const router = Router();
 
 router.post('/register', async (req, res) => {
-    const { first_name, last_name, email, rol, age, password } = req.body;
+    let { first_name, last_name, email, rol, age, password } = req.body;
     const exist = await userModel.findOne({ email });
+
+    if ( (email === 'adminCoder@coder.com') && (password === 'adminCod3r123')) {
+        rol = 'Admin';
+    } else {
+        rol = 'User';
+    }
 
     if (exist) {
         return res.status(400).send({ status: "error", error: "El usuario ya existe" });
@@ -15,7 +21,7 @@ router.post('/register', async (req, res) => {
     };
 
     const result = await userModel.create(user);
-    res.send({ status: "success", message: "Usuario registrado" });   
+    res.send({ status: "success", message: "Usuario registrado" });
 })
 
 router.post('/login', async (req, res) => {
@@ -38,7 +44,7 @@ router.post('/login', async (req, res) => {
 router.get('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) return res.status(500).send({ status: "error", error: "No se pudo cerrar la sesión" })
-        res.redirect('/login');
+        res.redirect('/');
     })
 })
 

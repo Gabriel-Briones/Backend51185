@@ -25,7 +25,6 @@ const adminAcces = (req, res, next) => {
 }
 
 //Va al login si no está logueado
-
 const privateAcces = (req, res, next) => {
     if (!req.session.user) return res.redirect('/login');
     next();
@@ -59,13 +58,15 @@ router.get('/users', privateAcces, adminAcces, async (req, res) => {
     })
 })
 
-router.get("/", async (req, res) => {
+router.get("/", privateAcces, async (req, res) => {
     res.render('home', {
         style: 'index.css',
+        user: req.session.user,
+        isAdmin: req.session.user.rol === 'Admin'
     });
 })
 
-router.get("/products", async (req, res) => {
+router.get("/products", privateAcces, async (req, res) => {
     const { page = 1, limit = 4 } = req.query;
     const { docs, hasPrevPage, hasNextPage, nextPage, prevPage } = await productModel.paginate({}, { page, limit, lean: true });
     const productos = docs;
@@ -76,11 +77,13 @@ router.get("/products", async (req, res) => {
         hasPrevPage,
         hasNextPage,
         nextPage,
-        prevPage
+        prevPage,
+        user: req.session.user,
+        isAdmin: req.session.user.rol === 'Admin'
     });
 })
 
-router.get("/realtimeproducts", async (req, res) => {
+router.get("/realtimeproducts", privateAcces, async (req, res) => {
     const productos = await productModel.find().lean();
 
     res.render('realTimeProducts', {
@@ -89,7 +92,7 @@ router.get("/realtimeproducts", async (req, res) => {
     });
 })
 
-router.get("/cart", async (req, res) => {
+router.get("/cart", privateAcces, async (req, res) => {
     const carts = await cartManager.getCarts();
     const carritos = carts.message;
 
@@ -111,7 +114,7 @@ router.get("/cart/:cid", async (req, res) => {
     })
 })
 
-router.post("/realtimeproducts", async (req, res) => {
+router.post("/realtimeproducts", privateAcces, async (req, res) => {
     const { title, description, price, thumbnail, code, stock, category } = req.body
     const producto = await productManager.addProduct(title, description, price, thumbnail, code, stock, category)
     producto ? res.send({ status: producto }) : res.status(400).send({ error: "Dato faltante o el producto ya existe" });

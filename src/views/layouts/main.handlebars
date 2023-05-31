@@ -7,7 +7,20 @@
     <link rel="stylesheet" href="/css/{{style}}" />
     <link rel="icon" type="image/png" href="\img\android-chrome-192x192.png" />
   </head>
+
+  <header>
+    <p>Bienvenido {{user.name}}</p>
+    {{#if isAdmin}}
+      <p> eres ADMINISTRADOR</p>
+    {{else}}
+      <p>Eres {{user.rol}}</p>
+    {{/if}}
+
+    <a href="/api/session/logout"><button>CERRAR SESIÓN</button></a>
+  </header>
+
   <body>
     {{{body}}}
   </body>
+
 </html>

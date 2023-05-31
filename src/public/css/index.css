@@ -7,6 +7,14 @@ body::-webkit-scrollbar {
     width: 20px;
 }
 
+header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgb(58, 58, 58);
+    font-family: Roboto;
+}
+
 body::-webkit-scrollbar-track {
     background: rgb(65, 65, 65);
 }
