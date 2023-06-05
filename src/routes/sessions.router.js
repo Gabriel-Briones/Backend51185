@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import userModel from '../dao/models/User.model.js';
+import { createHash, validatePassword } from '../utils.js';
 
 const router = Router();
 
@@ -17,7 +18,7 @@ router.post('/register', async (req, res) => {
         return res.status(400).send({ status: "error", error: "El usuario ya existe" });
     }
     const user = {
-        first_name, last_name, email, rol, age, password
+        first_name, last_name, email, rol, age, password: createHash(password)
     };
 
     const result = await userModel.create(user);
@@ -26,11 +27,14 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    const user = await userModel.findOne({ email, password })
+    const user = await userModel.findOne({ email })
 
     if (!user) {
         return res.status(400).send({ status: "error", error: "Datos incorrectos" })
     }
+
+    const isValidPassword = validatePassword(password,user);
+    if(!isValidPassword) return res.status(400).send({status:"error", error:"Datos incorrectos"})
 
     req.session.user = {
         name: `${user.first_name} ${user.last_name}`,
@@ -46,6 +50,21 @@ router.get('/logout', (req, res) => {
         if (err) return res.status(500).send({ status: "error", error: "No se pudo cerrar la sesión" })
         res.redirect('/');
     })
+})
+
+router.post('/restartPassword', async (req, res)=>{
+    const {email, password } = req.body;
+    
+    if(!email || !password ) return res.status(400).send({status:"error", error:"Datos incorrectos"})
+
+    const user = await userModel.findOne({email});
+    if(!user) return res.status(400).send({status:"error", error:"Datos incorrectos"})
+    
+    const newHashedPassword = createHash(password);
+
+    await userModel.updateOne({_id:user._id},{$set:{password:newHashedPassword}});
+
+    res.send({status:"success", message:"Contraseña actualizada"})
 })
 
 export default router;

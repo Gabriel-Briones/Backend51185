@@ -58,6 +58,13 @@ router.get('/users', privateAcces, adminAcces, async (req, res) => {
     })
 })
 
+router.get('/resetPassword', privateAcces, (req,res)=>{
+    res.render('resetPassword', {
+        style: 'index.css',
+        user: req.session.user
+    })
+})
+
 router.get("/", privateAcces, async (req, res) => {
     res.render('home', {
         style: 'index.css',
