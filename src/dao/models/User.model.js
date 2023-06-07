@@ -5,6 +5,7 @@ const collection = 'User';
 const schema = new mongoose.Schema({
     first_name: String,
     last_name: String,
+    name: String,
     email: String,
     age: Number,
     password: String,

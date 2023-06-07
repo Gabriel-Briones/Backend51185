@@ -5,12 +5,14 @@ import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import MongoStore from 'connect-mongo';
 import { Server } from "socket.io";
+import passport from "passport";
 
 import __dirname from "./utils.js";
 import productsRouter from "./routes/products.router.js";
 import cartRouter from "./routes/cart.router.js";
 import viewsRouter from "./routes/views.router.js";
 import sessionRouter from './routes/sessions.router.js';
+import initializePassport from "./config/passport.config.js";
 
 const DB = 'test';
 const MONGO = "mongodb+srv://gamiz08:90nB4FcgBlMjq56u@cluster0.69u12vz.mongodb.net/" + DB;
@@ -36,6 +38,9 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.engine("handlebars", handlebars.engine());
 
