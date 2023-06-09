@@ -21,3 +21,17 @@ form.addEventListener('submit', e =>{
         }
     })
 })
+
+    // fetch('/api/session/login',{
+    //     method: 'POST',
+    //     body: JSON.stringify(obj),
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     }
+    // }).then(result=>{
+    //     if(result.status == 200){
+    //         window.location.replace('/products');
+    //     }else{
+    //         alert(json.error)
+    //     }
+    // })
