@@ -16,6 +16,7 @@ const initializePassport = () => {
             try {
                 const user = await userService.findOne({ email: username });
                 const cart = await cartManager.createCart();
+                console.log(cart); 
                 if (user) {
                     console.log('El usuario existe');
                     return done(null, false);
@@ -32,7 +33,7 @@ const initializePassport = () => {
                     rol,
                     age,
                     password: createHash(password),
-                    cart: cart._id
+                    cart: cart.message._id
                 }
                 console.log(newUser);
 
