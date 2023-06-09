@@ -80,18 +80,15 @@ const initializePassport = () => {
 
     }, async (accesToken, refreshToken, profile, done) => {
         try {
-
             console.log(profile); //vemos toda la info que viene del profile
-            let user = await userService.findOne({ email: profile._json.email })
+            const email = profile.emails[0].value;
+            let user = await userService.findOne({ email })
             if (!user) {
-
-                const email = profile._json.email == null ? profile._json.username : null;
-
                 const newUser = {
-                    first_name: profile._json.name,
-                    last_name: '',
+                    first_name: profile.displayName,
+                    last_name: " ",
                     name: profile._json.name,
-                    email: email,
+                    email,
                     age: 18,
                     password: '',
                     rol: profile._json.type
